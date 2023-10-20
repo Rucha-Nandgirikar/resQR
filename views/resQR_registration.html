@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resQR</title>
+    <link rel="stylesheet" href="resQR_registration.css" />
+  </head>
+  <body class="resQR-background">
+    <div class="container">
+      <div class="registration-heading-container">
+        <div class="logo">
+          <img src="resQR-logo-design.png" class="logo-size" alt="resQR-logo" />
+        </div>
+        <div class="registration-heading">
+          <div style="text-align: center">
+            <h2>resQR Registration Form</h2>
+          </div>
+        </div>
+      </div>
+      <form
+        id="myForm"
+        class="registrationForm"
+        method="post"
+        action="/process-form"
+      >
+        <div class="owner_details">
+          <div class="registration-form-row">
+            <input
+              name="ownerVIN"
+              type="text"
+              placeholder="Enter Vehicle Identification Number (VIN)"
+            />
+          </div>
+          <div class="registration-form-row">
+            <input
+              type="text"
+              name="ownerFirstName"
+              placeholder="Enter Owner First Name"
+            />
+            <input
+              type="text"
+              name="ownerLastName"
+              placeholder="Enter Owner Last Name"
+            />
+          </div>
+          <div class="registration-form-row">
+            <input
+              type="text"
+              name="ownerEmailId"
+              placeholder="Enter your email id"
+            />
+            <input
+              type="text"
+              name="ownerPhoneNumber"
+              placeholder="Enter your Phone Number"
+            />
+          </div>
+          <div
+           class="registration-form-gender-dob"
+          >
+            <div
+            class="registration-form-equal-spacing"
+            >
+              <input
+                id="dob"
+                type="date"
+                name="ownerDateOfBirth"
+                placeholder="Enter your DOB"
+              />
+            </div>
+            <div
+            class="registration-form-equal-spacing"
+            >
+              <div class="registration-form-col">
+                <p>Select your Blood Group</p>
+                <select name="ownerBloodGroup" id="bloodGroup">
+                    <option value="null"></option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+            </div>
+            <div
+            class="registration-form-equal-spacing"
+            >
+              <div class="registration-form-col">
+                <p>Select your Gender</p>
+                <div   class="registration-form-gender-dob">
+                  <div class="registration-form-row">
+                    <input
+                      style="height: 13px; margin: 3px"
+                      type="radio"
+                      id="male"
+                      name="ownerGender"
+                      value="male"
+                    />
+                    <p>Male</p>
+                  </div>
+                  <div class="registration-form-row">
+                  <input
+                    style="height: 13px; margin: 3px"
+                    type="radio"
+                    id="female"
+                    name="ownerGender"
+                    value="female"
+                  />
+                  <p>Female</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="resQR_Form_details" type="submit" onclick="submitForm()">
+          Submit
+        </button>
+      </form>
+      <!-- <div id="imgBox">
+         <img src="" id="qrImage" />
+         </div> -->
+      <!-- <button onclick="generateQR()">Generate QR code</button> -->
+    </div>
+    <script>
+    //   let imgBox = document.getElementById("imgBox");
+    //   let qrImage = document.getElementById("qrImage");
+    //   let qrText = document.getElementById("qrText");
+
+      function generateQR(data) {
+        // console.log(data);
+        try {
+          const { text } = data;
+          if (!text) {
+            return res
+              .status(400)
+              .json({ error: "Missing 'text' key in the JSON data." });
+          }
+
+          QRCode.toDataURL(text, (err, url) => {
+            if (err) {
+              return res.status(500).json({ error: err.message });
+            }
+            res.json({ qrCodeUrl: url });
+          });
+        } catch (err) {
+          res.status(500).json({ error: err.message });
+        }        
+      }
+
+      function submitForm() {
+      
+        document.addEventListener("DOMContentLoaded", function () {
+          // Attach a submit event handler to the form
+          document
+            .getElementById("myForm")
+            .addEventListener("submit", function (event) {
+              event.preventDefault(); // Prevent the default form submission
+
+              // Get form elements by their name attribute
+              let ownerFirstName = this.elements["ownerFirstName"].value;
+              let ownerLastName = this.elements["ownerLastName"].value;
+              let ownerEmailId = this.elements["ownerEmailId"].value;
+              let ownerPhoneNumber = this.elements["ownerPhoneNumber"].value;
+              let ownerDateOfBirth = this.elements["ownerDateOfBirth"].value;
+              let ownerGender = this.elements["ownerDateOfBirth"].value;
+              let ownerBloodGroup = this.elements["ownerDateOfBirth"].value;
+
+              // Create a JSON object to store the form data
+              let formData = {
+                ownerFirstName: ownerFirstName,
+                ownerLastName: ownerLastName,
+                ownerEmailId: ownerEmailId,
+                ownerPhoneNumber: ownerPhoneNumber,
+                ownerDateOfBirth: ownerDateOfBirth,
+                ownerGender: ownerGender,
+                ownerBloodGroup: ownerBloodGroup,
+              };
+
+              fetch("/process-form", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                
+                });
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
