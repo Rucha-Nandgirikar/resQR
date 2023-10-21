@@ -130,6 +130,9 @@ body {
   flex-direction: row;
   justify-content: space-between;
 }
+.next {
+  width: 20%;
+}
 
 @keyframes shake {
   0% {

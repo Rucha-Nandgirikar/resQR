@@ -62,12 +62,16 @@
             <div
             class="registration-form-equal-spacing"
             >
+            <div  class="registration-form-col">
+              <p>Select your Birthdate</p>
               <input
-                id="dob"
-                type="date"
-                name="ownerDateOfBirth"
-                placeholder="Enter your DOB"
-              />
+              id="dob"
+              type="date"
+              name="ownerDateOfBirth"
+              placeholder="Enter your DOB"
+              style="height: 13px;margin: 0px;"
+            />
+            </div>
             </div>
             <div
             class="registration-form-equal-spacing"
@@ -117,9 +121,11 @@
             </div>
           </div>
         </div>
-        <button id="resQR_Form_details" type="submit" onclick="submitForm()">
-          Submit
-        </button>
+        <div style="display: flex;flex-direction: row-reverse;">
+          <button id="resQR_Form_details" type="submit" onclick="submitForm()"style="width: 20%;">
+            Next
+          </button>
+        </div>
       </form>
       <!-- <div id="imgBox">
          <img src="" id="qrImage" />
