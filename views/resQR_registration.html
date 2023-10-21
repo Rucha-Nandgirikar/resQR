@@ -6,10 +6,12 @@
     <title>resQR</title>
     <link rel="stylesheet" href="resQR_registration.css" />
   </head>
- 
   <body class="resQR-background">
     <div class="container">
       <div class="registration-heading-container">
+        <div class="logo">
+          <img src="resQR-logo-design.png" class="logo-size" alt="resQR-logo" />
+        </div>
         <div class="registration-heading">
           <div style="text-align: center">
             <h2>resQR Registration Form</h2>
@@ -55,28 +57,24 @@
             />
           </div>
           <div
-           class="registration-form-gender-dob"
+           class="registration-form-gender"
           >
             <div
             class="registration-form-equal-spacing"
             >
-            <div class="registration-form-col">
-                <p>Select your Date of birth</p>
-                <input
+              <input
                 id="dob"
                 type="date"
-                style="height: 30px;margin: 0px;"
                 name="ownerDateOfBirth"
                 placeholder="Enter your DOB"
               />
-            </div>
             </div>
             <div
             class="registration-form-equal-spacing"
             >
               <div class="registration-form-col">
                 <p>Select your Blood Group</p>
-                <select name="ownerBloodGroup" id="bloodGroup" style="padding: 5px;">
+                <select name="ownerBloodGroup" id="bloodGroup">
                     <option value="null"></option>
                   <option value="A+">A+</option>
                   <option value="A-">A-</option>
@@ -94,7 +92,7 @@
             >
               <div class="registration-form-col">
                 <p>Select your Gender</p>
-                <div   class="registration-form-gender-dob">
+                <div   class="registration-form-dob">
                   <div class="registration-form-row">
                     <input
                       style="height: 13px; margin: 3px"
@@ -119,39 +117,39 @@
             </div>
           </div>
         </div>
-        <div style="display: flex;flex-direction: row-reverse;">
-            <button id="resQR_Form_details" style="width: 20%;" type="submit" onclick="submitForm()">
-                Next
-            </button>
-        </div>
+        <button id="resQR_Form_details" type="submit" onclick="submitForm()">
+          Submit
+        </button>
       </form>
+      <!-- <div id="imgBox">
+         <img src="" id="qrImage" />
+         </div> -->
+      <!-- <button onclick="generateQR()">Generate QR code</button> -->
     </div>
-    
     <script>
     //   let imgBox = document.getElementById("imgBox");
     //   let qrImage = document.getElementById("qrImage");
     //   let qrText = document.getElementById("qrText");
 
+      function generateQR(data) {
+        try {
+          const { text } = data;
+          if (!text) {
+            return res
+              .status(400)
+              .json({ error: "Missing 'text' key in the JSON data." });
+          }
 
-      // function generateQR(data) {
-      //   try {
-      //     const { text } = data;
-      //     if (!text) {
-      //       return res
-      //         .status(400)
-      //         .json({ error: "Missing 'text' key in the JSON data." });
-      //     }
-
-      //     QRCode.toDataURL(text, (err, url) => {
-      //       if (err) {
-      //         return res.status(500).json({ error: err.message });
-      //       }
-      //       res.json({ qrCodeUrl: url });
-      //     });
-      //   } catch (err) {
-      //     res.status(500).json({ error: err.message });
-      //   }        
-      // }
+          QRCode.toDataURL(text, (err, url) => {
+            if (err) {
+              return res.status(500).json({ error: err.message });
+            }
+            res.json({ qrCodeUrl: url });
+          });
+        } catch (err) {
+          res.status(500).json({ error: err.message });
+        }        
+      }
 
       function submitForm() {
       

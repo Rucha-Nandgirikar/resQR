@@ -63,14 +63,14 @@ body {
   font-weight: 900;
 }
 .registration-heading-container {
-  height: 50px;
+  height: 86.5px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 .registration-heading {
-  width: 100%;
+  width: 89%;
   align-self: center;
 }
 .logo {
@@ -78,9 +78,8 @@ body {
   align-self: flex-end;
 }
 .logo-size {
-  height: 86.5px;
-  mix-blend-mode: multiply;
-  /* width: 100px; */
+  /* width: 86.5px; */
+  width: 100px;
 }
 .owner_details {
   display: flex;
@@ -88,7 +87,6 @@ body {
   flex-wrap: wrap;
   justify-content: flex-start;
 }
-
 #imgBox {
   width: 200px;
   border-radius: 5px;
@@ -126,14 +124,11 @@ body {
   justify-content: center;
 }
 
-.registration-form-gender-dob {
+.registration-form-gender,
+.registration-form-dob {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
-
-.registration-form-next {
-  width: 20%;
 }
 
 @keyframes shake {

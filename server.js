@@ -6,6 +6,8 @@ const QRCode = require("qrcode");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 const viewsDir = path.join(__dirname, "views");
 app.use(express.static(viewsDir));
@@ -32,14 +34,20 @@ app.post("/process-form", (req, res) => {
 
 app.post("/generate_qr", (req, res) => {
   try {
-    const { text } = req.body;
-    if (!text) {
+    const data = req.body;
+    if (!data || !data.resQR_User) {
       return res
         .status(400)
-        .json({ error: "Missing 'text' key in the JSON data." });
+        .json({ error: "Invalid or missing data in the request body." });
     }
 
-    QRCode.toFile(path.join(__dirname, "qrcode.png"), text, (err) => {
+    // Access the properties within the "resQR_User" object
+    const ownerData = data.resQR_User;
+
+    // Convert the ownerData to a string
+    const jsonData = JSON.stringify(ownerData);
+
+    QRCode.toFile(path.join(__dirname, "qrcode.png"), jsonData, (err) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -50,30 +58,3 @@ app.post("/generate_qr", (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// app.post("/generate_qr", (req, res) => {
-//   try {
-//     const data = req.body;
-//     if (!data || !data.resQR_User) {
-//       return res
-//         .status(400)
-//         .json({ error: "Invalid or missing data in the request body." });
-//     }
-
-//     // Access the properties within the "resQR_User" object
-//     const ownerData = data.resQR_User;
-
-//     // Convert the ownerData to a string
-//     const jsonData = JSON.stringify(ownerData);
-
-//     QRCode.toFile(path.join(__dirname, "qrcode.png"), jsonData, (err) => {
-//       if (err) {
-//         return res.status(500).json({ error: err.message });
-//       }
-//       const qrCodePath = path.join(__dirname, "qrcode.png");
-//       res.sendFile(qrCodePath);
-//     });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
