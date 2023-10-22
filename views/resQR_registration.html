@@ -179,6 +179,82 @@
       <!-- <button onclick="generateQR()">Generate QR code</button> -->
     </div>
     <script>
+
+        const addDependentsSelect = document.getElementById('add-dependents');
+        const addDependentButton = document.getElementById('add-dependent');
+        const submitButton = document.getElementById('submit-form');
+        const dependentsForm = document.getElementById('dependents-form');
+        const errorMessage = document.getElementById('error-message');
+        let dependentCount = 0;
+
+        // Initialize the form as hidden if "Add Dependents" is set to "No"
+        if (addDependentsSelect.value === "no") {
+            dependentsForm.classList.add("disabled-form");
+        }
+
+        // Event listener for the "Add Dependents" select
+        addDependentsSelect.addEventListener('change', () => {
+            if (addDependentsSelect.value === "yes") {
+                dependentsForm.classList.remove("disabled-form");
+                resetDependentForm();
+            } else {
+                dependentsForm.classList.add("disabled-form");
+            }
+        });
+
+        // Event listener for the "Add Dependent" button
+        addDependentButton.addEventListener('click', () => {
+            if (dependentCount < 5) {
+                const dependentDetails = dependentsForm.querySelector('.dependent-details');
+                const newDependentDetails = dependentDetails.cloneNode(true);
+                resetDependentForm(newDependentDetails);
+                dependentsForm.appendChild(newDependentDetails);
+                dependentCount++;
+            } else {
+                errorMessage.textContent = "You can't add more than 5 dependents.";
+            }
+        });
+
+        // Event listener for removing dependents
+        dependentsForm.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-dependent')) {
+                event.target.parentElement.remove();
+                dependentCount--;
+                errorMessage.textContent = ""; // Clear error message
+            }
+        });
+
+        // Reset a dependent form to clear input values
+        function resetDependentForm(form) {
+            if (!form) {
+                form = dependentsForm.querySelector('.dependent-details');
+            }
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach((input) => {
+                input.value = '';
+            });
+        }
+
+        // Event listener for the "Submit" button
+        submitButton.addEventListener('click', () => {
+            const formData = [];
+            const dependentDetails = document.querySelectorAll('.dependent-details');
+
+            dependentDetails.forEach((dependent) => {
+                const elements = dependent.querySelectorAll('[name]');
+                const dependentData = {};
+
+                elements.forEach((element) => {
+                    dependentData[element.name] = element.value;
+                });
+
+                formData.push(dependentData);
+            });
+
+            const jsonData = JSON.stringify(formData, null, 2);
+            console.log(jsonData);
+        });
+
     //   let imgBox = document.getElementById("imgBox");
     //   let qrImage = document.getElementById("qrImage");
     //   let qrText = document.getElementById("qrText");
@@ -245,7 +321,7 @@
                 });
             });
         });
-      }
+      }  
     </script>
   </body>
 </html>
