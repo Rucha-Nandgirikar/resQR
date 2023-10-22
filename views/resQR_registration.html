@@ -121,6 +121,52 @@
             </div>
           </div>
         </div>
+        <div class="dependent-form">
+          <h2 style="text-align: center">Dependents Details</h2>
+          <form id="dependents-form">
+              <div class="dependent-input">
+                  <label for="add-dependents">Add Dependents:</label>
+                  <select id="add-dependents" name="add-dependents">
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+              </div>
+              <div class="dependent-details">
+                  <div class="dependent-input">
+                      <label for="first-name">First Name:</label>
+                      <input type="text" name="first-name">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="last-name">Last Name:</label>
+                      <input type="text" name="last-name">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="gender">Gender:</label>
+                      <select name="gender">
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                      </select>
+                  </div>
+                  <div class="dependent-input">
+                      <label for="birthdate">Birthdate:</label>
+                      <input type="date" name="birthdate">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="email">Email:</label>
+                      <input type="email" name="email">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="contact-number">Contact Number:</label>
+                      <input type="tel" name="contact-number">
+                  </div>
+                  <button type="button" class="remove-dependent">Remove Dependent</button>
+              </div>
+              <div class="error-message" id="error-message"></div>
+              <button type="button" id="add-dependent">Add Dependent</button>
+              <button type="button" id="submit-form">Submit</button>
+          </form>
+      </div>
         <div style="display: flex;flex-direction: row-reverse;">
           <button id="resQR_Form_details" type="submit" onclick="submitForm()"style="width: 20%;">
             Next
