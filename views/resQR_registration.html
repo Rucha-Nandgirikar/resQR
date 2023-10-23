@@ -79,7 +79,7 @@
               <div class="registration-form-col">
                 <p>Select your Blood Group</p>
                 <select name="ownerBloodGroup" id="bloodGroup">
-                    <option value="null"></option>
+                  <option value="null"></option>
                   <option value="A+">A+</option>
                   <option value="A-">A-</option>
                   <option value="B+">B+</option>
@@ -121,6 +121,74 @@
             </div>
           </div>
         </div>
+<!--Dependents-->
+        <div class="dependent-form">
+          <h2 style="text-align: center">Dependents Details</h2>
+          <form id="dependents-form">
+              <div class="dependent-input">
+                  <label for="add-dependents">Add Dependents:</label>
+                  <select id="add-dependents" name="add-dependents">
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+              </div>
+              <div class="dependent-details">
+                  <div class="dependent-input">
+                      <label for="first-name">First Name:</label>
+                      <input type="text" name="first-name">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="last-name">Last Name:</label>
+                      <input type="text" name="last-name">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="gender">Gender:</label>
+                      <select name="gender">
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                      </select>
+                  </div>
+                  <div class="dependent-input">
+                      <label for="birthdate">Birthdate:</label>
+                      <input type="date" name="birthdate">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="email">Email:</label>
+                      <input type="email" name="email">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="contact-number">Contact Number:</label>
+                      <input type="tel" name="contact-number">
+                  </div>
+                  <div class="dependent-input">
+                      <label for="blood-group">Blood Group:</label>
+                      <select name="blood-group">
+                          <option value="A+">A+</option>
+                          <option value="B+">B+</option>
+                          <option value="AB+">AB+</option>
+                          <option value="O+">O+</option>
+                          <option value="A-">A-</option>
+                          <option value="B-">B-</option>
+                          <option value="AB-">AB-</option>
+                          <option value="O-">O-</option>
+                      </select>
+                  </div>
+                  <div class="dependent-input">
+                      <label for="member-type">Dependents Member Type:</label>
+                      <select name="member-type">
+                          <option value="family">Family</option>
+                          <option value="friend">Friend</option>
+                      </select>
+                  </div>
+                  <button type="button" class="remove-dependent">Remove Dependent</button>
+              </div>
+              <div class="error-message" id="error-message"></div>
+              <button type="button" id="add-dependent">Add Dependent</button>
+              <button type="button" id="submit-form">Submit</button>
+          </form>
+      </div>
+
         <div style="display: flex;flex-direction: row-reverse;">
           <button id="resQR_Form_details" type="submit" onclick="submitForm()"style="width: 20%;">
             Next
@@ -136,6 +204,83 @@
     //   let imgBox = document.getElementById("imgBox");
     //   let qrImage = document.getElementById("qrImage");
     //   let qrText = document.getElementById("qrText");
+
+
+        const addDependentsSelect = document.getElementById('add-dependents');
+        const addDependentButton = document.getElementById('add-dependent');
+        const submitButton = document.getElementById('submit-form');
+        const dependentsForm = document.getElementById('dependents-form');
+        const errorMessage = document.getElementById('error-message');
+        let dependentCount = 0;
+        let formData = [];
+
+        // Initialize the form as hidden if "Add Dependents" is set to "No"
+        if (addDependentsSelect.value === "no") {
+            dependentsForm.classList.add("disabled-form");
+        }
+
+        // Event listener for the "Add Dependents" select
+        addDependentsSelect.addEventListener('change', () => {
+            if (addDependentsSelect.value === "yes") {
+                dependentsForm.classList.remove("disabled-form");
+                resetDependentForm();
+            } else {
+                dependentsForm.classList.add("disabled-form");
+            }
+        });
+
+        // Event listener for the "Add Dependent" button
+        addDependentButton.addEventListener('click', () => {
+            if (dependentCount < 5) {
+                const dependentDetails = dependentsForm.querySelector('.dependent-details');
+                const newDependentDetails = dependentDetails.cloneNode(true);
+                resetDependentForm(newDependentDetails);
+                dependentsForm.appendChild(newDependentDetails);
+                dependentCount++;
+            } else {
+                errorMessage.textContent = "You can't add more than 5 dependents.";
+            }
+        });
+
+        // Event listener for removing dependents
+        dependentsForm.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-dependent')) {
+                event.target.parentElement.remove();
+                dependentCount--;
+                errorMessage.textContent = ""; // Clear error message
+            }
+        });
+
+        // Reset a dependent form to clear input values
+        function resetDependentForm(form) {
+            if (!form) {
+                form = dependentsForm.querySelector('.dependent-details');
+            }
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach((input) => {
+                input.value = '';
+            });
+        }
+
+        // Event listener for the "Submit" button
+        submitButton.addEventListener('click', () => {
+            const dependentDetails = document.querySelectorAll('.dependent-details');
+            formData = [];
+
+            dependentDetails.forEach((dependent) => {
+                const elements = dependent.querySelectorAll('[name]');
+                const dependentData = {};
+
+                elements.forEach((element) => {
+                    dependentData[element.name] = element.value;
+                });
+
+                formData.push(dependentData);
+            });
+
+            const jsonData = JSON.stringify(formData, null, 2);
+            console.log(jsonData);
+        });
 
       function generateQR(data) {
         try {

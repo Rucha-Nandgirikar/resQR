@@ -151,3 +151,22 @@ body {
     transform: translateX(0);
   }
 }
+
+/*----------Dependents styling------------*/
+
+.dependent-form {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 600px;
+  position: absolute;
+}
+.dependent-input {
+  margin-bottom: 10px;
+}
+.disabled-form {
+  display: none;
+}
+.error-message {
+  color: red;
+}
