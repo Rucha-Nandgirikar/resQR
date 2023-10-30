@@ -27,7 +27,7 @@ body {
   width: 700px;
   padding: 25px 35px;
   position: absolute;
-  top: 50%;
+  top: 100%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
@@ -157,9 +157,7 @@ body {
 .dependent-form {
   margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
-  max-width: 600px;
-  position: absolute;
+
 }
 .dependent-input {
   margin-bottom: 10px;
