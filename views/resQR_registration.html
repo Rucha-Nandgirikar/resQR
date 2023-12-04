@@ -35,13 +35,16 @@
           <div class="registration-form-row">
             <input
               type="text"
-              name="ownerFirstName"
-              placeholder="Enter Owner First Name"
+              name="ownerFullName"
+              placeholder="Enter Owner Full Name"
             />
+          </div>
+          <div class="registration-form-row">
             <input
+              name="ownerPassword"
               type="text"
-              name="ownerLastName"
-              placeholder="Enter Owner Last Name"
+              placeholder="Enter Password"
+              oninput="isPasswordValid()"
             />
           </div>
           <div class="registration-form-row">
@@ -165,13 +168,8 @@
             <div class="registration-form-row">
               <input
                 type="text"
-                name="dependentFirstName"
-                placeholder="Enter Dependent First Name"
-              />
-              <input
-                type="text"
-                name="dependentLastName"
-                placeholder="Enter Dependent Last Name"
+                name="dependentFullName"
+                placeholder="Enter Dependent Full Name"
               />
             </div>
             <div class="registration-form-row">
@@ -341,10 +339,7 @@
           // Collect form data and add to formData array
           var formDataEntry = {
             dependentType: form.querySelector('[name="dependentType"]').value,
-            dependentFirstName: form.querySelector(
-              '[name="dependentFirstName"]'
-            ).value,
-            dependentLastName: form.querySelector('[name="dependentLastName"]')
+            dependentFullName: form.querySelector('[name="dependentFullName"]')
               .value,
             dependentEmailId: form.querySelector('[name="dependentEmailId"]')
               .value,
@@ -366,13 +361,26 @@
 
         const uniqueKey = uuidv4();
 
+        fetch(`/encrypt?key=${uniqueKey}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // hospitalsList = data;
+          })
+          .catch((error) => console.error("Error:", error));
+
         // Create JSON object
         let jsonObject = {
           resQR_user: {
             ownerVIN: document.querySelector('[name="ownerVIN"]').value,
-            ownerFirstName: document.querySelector('[name="ownerFirstName"]')
+            ownerFullName: document.querySelector('[name="ownerFullName"]')
               .value,
-            ownerLastName: document.querySelector('[name="ownerLastName"]')
+            ownerPassword: document.querySelector('[name="ownerPassword"]')
               .value,
             ownerEmailId: document.querySelector('[name="ownerEmailId"]').value,
             ownerPhoneNumber: document.querySelector(
@@ -389,6 +397,7 @@
             resQRText: uniqueKey,
           },
         };
+        //
         fetchData(jsonObject);
       }
 
@@ -533,6 +542,37 @@
           );
         }
       }
+
+      const isPasswordValid = validatePassword();
+
+      // function isValid(password) {
+      //   if (password) {
+      //   } else {
+      //     alert("Password is invalid.");
+      //   }
+      // }
+
+      function validatePassword() {
+        const password = document.getElementById("myInput").value;
+        // Minimum length check
+        if (password.length < 8) {
+          return false;
+        }
+
+        // Special character check
+        const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!specialCharacters.test(password)) {
+          alert("Password is invalid.");
+          return false;
+        }
+
+        // If all checks pass, the password is valid
+        return true;
+      }
+
+      // // Example usage
+      // const passwordToCheck = "MyP@ssw0rd";
+      // const isValid = validatePassword(passwordToCheck);
 
       function downloadQR(imageUrl, fileName) {
         // Create a temporary anchor element

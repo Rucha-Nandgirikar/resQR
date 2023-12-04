@@ -3,9 +3,9 @@ const path = require("path");
 const app = express();
 const bodyParser = require("body-parser");
 const QRCode = require("qrcode");
-// const cors = require("cors");
 const nodemailer = require("nodemailer");
 const axios = require("axios");
+const crypto = require("crypto");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,6 +18,9 @@ app.use(express.static(path.join(__dirname, "./public")));
 app.use(express.static(path.join(__dirname, "./images")));
 
 const PORT = 4000;
+
+// Replace 'your-secret-key' with a strong, secure key
+const secretKey = "your-secret-key";
 
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*"); // Replace with the actual origin
@@ -95,6 +98,35 @@ app.get("/policeStations", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+function encrypt(text) {
+  const cipher = crypto.createCipher("aes-256-cbc", secretKey);
+  let encrypted = cipher.update(text, "utf-8", "hex");
+  encrypted += cipher.final("hex");
+  return encrypted;
+}
+
+app.get("/encrypt", async (req, res) => {
+  // console.log(req);
+  const originalText = req.query.key;
+
+  if (!originalText) {
+    return res.status(400).json({ error: "Text parameter is required." });
+  }
+
+  const encryptedText = encrypt(originalText);
+  const decryptedText = decrypt(encryptedText);
+
+  console.log(decryptedText);
+  res.json({ encryptedText });
+});
+
+function decrypt(encryptedText) {
+  const decipher = crypto.createDecipher("aes-256-cbc", secretKey);
+  let decrypted = decipher.update(encryptedText, "hex", "utf-8");
+  decrypted += decipher.final("utf-8");
+  return decrypted;
+}
 
 const user = "John Doe"; // Replace with the actual user's name
 const geoLocation = "Latitude: 40.7128, Longitude: -74.0060"; // Replace with the actual geo location

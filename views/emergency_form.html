@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div id="emergency-form-questions">
           <div>
             <p>
               Respond to these questions quickly so that we can help those who
@@ -127,12 +127,29 @@
             Submit
           </button>
         </div>
+        <div id="notification-sent" style="display: none">
+          <div
+            style="
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 20px;
+            "
+          >
+            <img src="green_tick.png" style="width: 50px" />
+            <h4 style="color: green">
+              A NOTIFICATION HAS BEEN SENT TO THE VICTIM'S FAMILY MEMBERS.
+            </h4>
+          </div>
+        </div>
       </div>
     </div>
 
     <script>
       let hospitalsList = null;
       let policeStationsList = null;
+      let hospitalsDisplayList = [];
+      let policeStationsDisplayList = [];
       function submitEmergencyAnswers() {
         // Collect form details
         const isVictim = document.querySelector('input[name="victim"]:checked');
@@ -159,7 +176,16 @@
         };
 
         // Now you can do something with the collected data
-        console.log("Form Data:", formData);
+        // console.log("Form Data:", formData);
+
+        // Hide the form container
+        document.getElementById("emergency-form-questions").style.display =
+          "none";
+
+        document.getElementById("notification-sent").style.display = "block";
+
+        // Show the list container
+        // document.getElementById("listContainer").style.display = "block";
 
         // send mail functionality
 
@@ -201,8 +227,24 @@
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             hospitalsList = data;
+            let hospitals = hospitalsList["hospitals"];
+            for (let i = 0; i < hospitals.length; i++) {
+              const place = hospitals[i];
+
+              // Extract properties and create a new object
+              const hospital = {
+                latitude: place.geometry.location.lat,
+                longitude: place.geometry.location.lng,
+                name: place.name,
+                vicinity: place.vicinity,
+              };
+
+              // Push the new object to the processedPlaces array
+              hospitalsDisplayList.push(hospital);
+            }
+
+            console.log(hospitalsDisplayList);
           })
           .catch((error) => console.error("Error:", error));
 
@@ -217,8 +259,23 @@
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             policeStationsList = data;
+            let policeStations = policeStationsList["policeStations"];
+            for (let i = 0; i < policeStations.length; i++) {
+              const place = policeStations[i];
+
+              // Extract properties and create a new object
+              const policeStation = {
+                latitude: place.geometry.location.lat,
+                longitude: place.geometry.location.lng,
+                name: place.name,
+                vicinity: place.vicinity,
+              };
+
+              // Push the new object to the processedPlaces array
+              policeStationsDisplayList.push(policeStation);
+            }
+            console.log(policeStationsDisplayList);
           })
           .catch((error) => console.error("Error:", error));
       }

@@ -129,6 +129,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 20px;
 }
 .next {
   width: 20%;
@@ -176,12 +177,7 @@ body {
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
-body {
-  /* background: lightblue; */
-  /* background: #800080; */
-  /* background-color: #ff8c00; */
-  /* background-color: #00a86b; */
-}
+
 .resQR-background {
   background-image: url("caution.jpg");
   /* background: rgba(0, 0, 0, 0.5); */
