@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resQR Emergency</title>
+    <link rel="stylesheet" href="emergency_form.css" />
+  </head>
+  <body class="resQR-background">
+    <div class="container" id="emergencyForm" data-form-counter="1">
+      <div
+        class="form-step form-step-active"
+        style="display: flex; flex-direction: column"
+      >
+        <div class="emergency-heading-container">
+          <div class="logo">
+            <img
+              src="resQR-logo-design.png"
+              class="logo-size"
+              alt="resQR-logo"
+            />
+          </div>
+          <div class="emergency-heading">
+            <div style="text-align: center">
+              <h2>resQR Accident Assistance Form</h2>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <p>
+              Respond to these questions quickly so that we can help those who
+              have been affected in better and more formal terms.
+            </p>
+          </div>
+          <!-- Question 2 -->
+          <div style="display: flex; flex-direction: row">
+            <p>
+              1) Please allow us to capture the geo location of the accident.
+            </p>
+            <div>
+              <label class="switch">
+                <input type="checkbox" id="myToggle" onchange="getLocation()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <p>2) Are you the victim in the accident?</p>
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="victim"
+                  value="yes"
+                />
+                <p>Yes</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="victim"
+                  value="no"
+                />
+                <p>No, just a Bystander</p>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <p>3) According to you, how severe is the accident?</p>
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="Minor"
+                />
+                <p>Minor</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="moderate"
+                />
+                <p>Moderate</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="serious"
+                />
+                <p>Serious</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="critical"
+                />
+                <p>Critical</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 4 -->
+          <div style="display: flex; flex-direction: column">
+            <p>4) Please enter the number of passengers affected.</p>
+            <input type="number" name="passenger_count" min="1" />
+          </div>
+          <p>
+            Thank you; We will notify the passenger's family and contact nearby
+            hospitals and police stations for assistance.
+          </p>
+          <button
+            type="submit"
+            id="submit-btn"
+            onclick="submitEmergencyAnswers()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let hospitalsList = null;
+      let policeStationsList = null;
+      function submitEmergencyAnswers() {
+        // Collect form details
+        const isVictim = document.querySelector('input[name="victim"]:checked');
+        const severity = document.querySelector(
+          'input[name="severity"]:checked'
+        );
+        const passengerCount = document.querySelector(
+          'input[name="passenger_count"]'
+        ).value;
+
+        // Validate form details
+        if (!isVictim || !severity || passengerCount === "") {
+          alert("Please answer all questions before submitting.");
+          return;
+        }
+
+        // Gather the form details
+        const formData = {
+          isVictim: isVictim.value,
+          severity: severity.value,
+          passengerCount: parseInt(passengerCount, 10),
+          hospitalsList: hospitalsList,
+          policeStationsList: policeStationsList,
+        };
+
+        // Now you can do something with the collected data
+        console.log("Form Data:", formData);
+
+        // send mail functionality
+
+        const currentURL = window.location.href;
+        let key = currentURL.split("?");
+        let uniqueKey = key[1].split("=");
+        console.log(uniqueKey[1]);
+        // get details from db and get all the details of the user
+        // and shoot a mail on press of submit button
+
+        // Add code to send the form data to your server if needed
+      }
+
+      function getLocation() {
+        var toggle = document.getElementById("myToggle");
+        if (toggle.checked) {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+      }
+
+      function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const apiKey = "AIzaSyA99ZNTkd6VVEPywZ0o5DpdmoY7WcAwBP0";
+        const radius = 5000; // 5000 meters (adjust as needed)
+
+        fetch(
+          `/hospitals?location=${latitude},${longitude}&radius=${radius}&types=hospital&key=${apiKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            hospitalsList = data;
+          })
+          .catch((error) => console.error("Error:", error));
+
+        fetch(
+          `/policeStations?location=${latitude},${longitude}&radius=${radius}&types=police&key=${apiKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            policeStationsList = data;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function showError(error) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+        }
+      }
+    </script>
+  </body>
+</html>
