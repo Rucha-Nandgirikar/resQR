@@ -41,14 +41,6 @@
           </div>
           <div class="registration-form-row">
             <input
-              name="ownerPassword"
-              type="text"
-              placeholder="Enter Password"
-              oninput="isPasswordValid()"
-            />
-          </div>
-          <div class="registration-form-row">
-            <input
               type="email"
               name="ownerEmailId"
               placeholder="Enter Owner Email Id"
@@ -379,8 +371,6 @@
           resQR_user: {
             ownerVIN: document.querySelector('[name="ownerVIN"]').value,
             ownerFullName: document.querySelector('[name="ownerFullName"]')
-              .value,
-            ownerPassword: document.querySelector('[name="ownerPassword"]')
               .value,
             ownerEmailId: document.querySelector('[name="ownerEmailId"]').value,
             ownerPhoneNumber: document.querySelector(
