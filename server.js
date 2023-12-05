@@ -7,7 +7,7 @@ const nodemailer = require("nodemailer");
 const axios = require("axios");
 const crypto = require("crypto");
 const connectDb = require('./src/db');
-const Dependent = require('./src/models/Dependent');
+const Dependent = require('./src/models/dependent.js');
 const UserRoute = require('./src/userRoute.js');
 const User = require("./src/models/User");
 
