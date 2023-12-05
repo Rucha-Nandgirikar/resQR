@@ -278,9 +278,87 @@
                 formData.push(dependentData);
             });
 
+            //Validation
+            const isValid = validateForm();
+            if (isValid) { 
             const jsonData = JSON.stringify(formData, null, 2);
             console.log(jsonData);
+            }
         });
+
+        function validateForm() {
+            let errors = [];
+
+            const ownerFirstName = document.getElementById('ownerFirstName').value;
+            const ownerLastName = document.getElementById('ownerLastName').value;
+            const ownerEmailId = document.getElementById('ownerEmailId').value;
+            const ownerPhoneNumber = document.getElementById('ownerPhoneNumber').value;
+            const ownerDateOfBirth = document.getElementById('dob').value;
+            const ownerGender = document.querySelector('input[name="ownerGender"]:checked');
+            const ownerBloodGroup = document.getElementById('bloodGroup').value;
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!ownerFirstName) {
+                errors.push("Please enter the first name.");
+            }
+
+            if (!ownerLastName) {
+                errors.push("Please enter the last name.");
+            }
+
+            if (!ownerEmailId || !emailRegex.test(ownerEmailId)) {
+                errors.push("Please enter a valid email address.");
+            }
+
+            if (!ownerPhoneNumber || isNaN(ownerPhoneNumber) || ownerPhoneNumber.length !== 10) {
+                errors.push("Please enter a valid 10-digit phone number.");
+            }
+
+            if (!ownerDateOfBirth) {
+                errors.push("Please select your date of birth.");
+            }
+
+            if (!ownerGender) {
+                errors.push("Please select your gender.");
+            }
+
+            if (ownerBloodGroup === "null") {
+                errors.push("Please select your blood group.");
+            }
+            // Validation for dependents
+              const dependentDetails = document.querySelectorAll('.dependent-details');
+              dependentDetails.forEach((dependent, index) => {
+                  const dependentFirstName = dependent.querySelector('[name="first-name"]').value;
+                  const dependentLastName = dependent.querySelector('[name="last-name"]').value;
+                  const dependentEmail = dependent.querySelector('[name="email"]').value;
+                  const dependentContactNumber = dependent.querySelector('[name="contact-number"]').value;
+                  const dependentBirthdate = dependent.querySelector('[name="birthdate"]').value;
+
+                  if (!dependentFirstName) {
+                      errors.push(`Please enter the first name for dependent ${index + 1}.`);
+                  }
+
+                  if (!dependentLastName) {
+                      errors.push(`Please enter the last name for dependent ${index + 1}.`);
+                  }
+
+                  if (!dependentEmail || !emailRegex.test(dependentEmail)) {
+                      errors.push(`Please enter a valid email address for dependent ${index + 1}.`);
+                  }
+
+                  if (!dependentContactNumber || isNaN(dependentContactNumber) || dependentContactNumber.length !== 10) {
+                      errors.push(`Please enter a valid 10-digit phone number for dependent ${index + 1}.`);
+                  }
+
+                  if (!dependentBirthdate) {
+                      errors.push(`Please select the birthdate for dependent ${index + 1}.`);
+              }
+            });
+            // Display errors
+            errorMessage.textContent = errors.join(" ");
+            return errors.length === 0; // Return true if there are no errors
+      }
 
       function generateQR(data) {
         try {
@@ -317,8 +395,8 @@
               let ownerEmailId = this.elements["ownerEmailId"].value;
               let ownerPhoneNumber = this.elements["ownerPhoneNumber"].value;
               let ownerDateOfBirth = this.elements["ownerDateOfBirth"].value;
-              let ownerGender = this.elements["ownerDateOfBirth"].value;
-              let ownerBloodGroup = this.elements["ownerDateOfBirth"].value;
+              let ownerGender = document.querySelector('input[name="ownerGender"]:checked');
+              let ownerBloodGroup = this.elements["ownerBloodGroup"].value;
 
               // Create a JSON object to store the form data
               let formData = {
@@ -327,7 +405,7 @@
                 ownerEmailId: ownerEmailId,
                 ownerPhoneNumber: ownerPhoneNumber,
                 ownerDateOfBirth: ownerDateOfBirth,
-                ownerGender: ownerGender,
+                ownerGender: ownerGender ? ownerGender.value : null, // to avoid null reference,I use ternary operator
                 ownerBloodGroup: ownerBloodGroup,
               };
 
