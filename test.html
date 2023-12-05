@@ -34,15 +34,15 @@
           </div>
           <div class="registration-form-row">
             <input
-            type="text"
-            name="ownerFirstName"
-            placeholder="Enter Owner First Name"
-          />
-          <input
-            type="text"
-            name="ownerLastName"
-            placeholder="Enter Owner Last Name"
-          />
+              type="text"
+              name="ownerFirstName"
+              placeholder="Enter Owner First Name"
+            />
+            <input
+              type="text"
+              name="ownerLastName"
+              placeholder="Enter Owner Last Name"
+            />
           </div>
           <div class="registration-form-row">
             <input
@@ -158,7 +158,7 @@
       );
 
       if (formCounter <= 5) {
-
+        const errors = validateDependentForm();
         // Hide the currently active form
         var activeForm = document.querySelector(".form-step-active");
         activeForm.classList.remove("form-step-active");
@@ -624,7 +624,6 @@
       ).value;
       const ownerGender = document.querySelector('[name="ownerGender"]:checked');
       const ownerBloodGroup = document.querySelector('[name="ownerBloodGroup"]').value;
-
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!ownerVin) {
@@ -660,6 +659,46 @@
       }
       
       return errors; // Return true if there are no errors
+    }
+    // Validation for dependents
+    function validateDependentForm(){
+        let errors = [];
+        
+        const dependentDetails = document.querySelectorAll('.dependent-details');
+      dependentDetails.forEach((dependent, index) => {
+        const dependentFullName = dependent.querySelector('[name="dependentFullName"]').value;
+        const dependentEmail = dependent.querySelector('[name="dependentEmail"]').value;
+        const dependentPhoneNumber = dependent.querySelector('[name="dependentPhoneNumber"]').value;
+        const dependentDateOfBirth = dependent.querySelector('[name="dependentDateOfBirth"]').value;
+        const dependentBloodGroup = dependent.querySelector('[name="dependentBloodGroup"]').value;
+        const dependentGender = dependent.querySelector('[name="dependentGender"]').value;
+
+        if (!dependentFullName) {
+          errors.push(`Please enter the name for dependent ${index + 1}.`);
+              }
+
+        if (!dependentEmail || !emailRegex.test(dependentEmail)) {
+              errors.push(`Please enter a valid email address for dependent ${index + 1}.`);
+            }
+
+        if (!dependentPhoneNumber || isNaN(dependentPhoneNumber) || dependentPhoneNumber.length !== 10) {
+              errors.push(`Please enter a valid 10-digit phone number for dependent ${index + 1}.`);
+            }
+
+        if (!dependentDateOfBirth) {
+           errors.push(`Please select the date of birth for dependent ${index + 1}.`);
+              }
+
+        if (!dependentGender) {
+          errors.push("Please select your gender.");
+          }
+
+      if (dependentBloodGroup === "null") {
+          errors.push("Please select your blood group.");
+      }
+      return errors; //Return true if there are no errors
+
+            });
     }
     
     function downloadQR(imageUrl, fileName) {
