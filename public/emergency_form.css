@@ -15,12 +15,14 @@ body::before {
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(
+  /* background: rgba(
     0,
     0,
     0,
     0.5
-  ); /* Adjust the alpha (fourth parameter) to control the darkness */
+  ); */
+
+  /* Adjust the alpha (fourth parameter) to control the darkness */
 }
 .container {
   width: 700px;
@@ -170,4 +172,22 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  font-size: x-small;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
 }

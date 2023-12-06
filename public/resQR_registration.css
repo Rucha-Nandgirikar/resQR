@@ -15,12 +15,14 @@ body {
 }
 .resQR-background::before {
   position: absolute;
-  background-color: rgba(
+  /* background-color: rgba(
     0,
     0,
     0,
     0.5
-  ); /* Adjust the last value (alpha) to control the opacity */
+  ); 
+   */
+  /* Adjust the last value (alpha) to control the opacity */
 }
 
 .container {

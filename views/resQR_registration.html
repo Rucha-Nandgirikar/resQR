@@ -119,7 +119,10 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+
     <script>
+      // // Initialize Firebase
+
       function addDependentForm() {
         var formCounter = parseInt(
           document
@@ -361,7 +364,8 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+            encryptedKey = data["encryptedText"];
+            console.log(encryptedKey);
             // hospitalsList = data;
           })
           .catch((error) => console.error("Error:", error));
@@ -387,7 +391,7 @@
             resQRText: uniqueKey,
           },
         };
-        //
+
         fetchData(jsonObject);
       }
 
@@ -533,7 +537,7 @@
         }
       }
 
-      const isPasswordValid = validatePassword();
+      // const isPasswordValid = validatePassword();
 
       // function isValid(password) {
       //   if (password) {
@@ -542,23 +546,23 @@
       //   }
       // }
 
-      function validatePassword() {
-        const password = document.getElementById("myInput").value;
-        // Minimum length check
-        if (password.length < 8) {
-          return false;
-        }
+      // function validatePassword() {
+      //   const password = document.getElementById("myInput").value;
+      //   // Minimum length check
+      //   if (password.length < 8) {
+      //     return false;
+      //   }
 
-        // Special character check
-        const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
-        if (!specialCharacters.test(password)) {
-          alert("Password is invalid.");
-          return false;
-        }
+      //   // Special character check
+      //   const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+      //   if (!specialCharacters.test(password)) {
+      //     alert("Password is invalid.");
+      //     return false;
+      //   }
 
-        // If all checks pass, the password is valid
-        return true;
-      }
+      //   // If all checks pass, the password is valid
+      //   return true;
+      // }
 
       // // Example usage
       // const passwordToCheck = "MyP@ssw0rd";
